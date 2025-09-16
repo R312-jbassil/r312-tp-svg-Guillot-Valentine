@@ -5,9 +5,9 @@ import Layout from "../layouts/Layout.astro";
 <Layout>
   <div class="flex flex-col h-full glass bg-primary p-4">
     <div class="grid grid-cols-2 gap-4 flex-1 mb-4">
-      <div class="w-full flex bg-primary h-full">test</div>
+      <div id="svg-container" class="w-full flex bg-white h-full"></div>
 
-      <div class="w-full pl-2 bg-secondary h-full"></div>
+      <div id="svg-output" class="w-full pl-2 bg-black text-secondary-content h-full"></div>
     </div>
 
     <div class="flex flex-col">
@@ -21,3 +21,37 @@ import Layout from "../layouts/Layout.astro";
     </div>
   </div>
 </Layout>
+
+<script>
+  //@ts-nocheck
+
+  async function generateSVG(prompt) {
+    console.log("Generating SVG for prompt:", prompt);
+    const res = await fetch("/api/generateSVG", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ prompt }),
+    });
+    const data = await res.json();
+    return data.svg;
+  }
+
+  async function handleSubmit() {
+    let prompt = "";
+    let svgCode = "";
+    const promptElement = document.getElementById("user-prompt");
+    prompt = promptElement ? promptElement.value : "";
+    console.log("submitted: ", prompt); // message affiché sur votre console d'inspecteur dans le navigateur
+    const svgContainer = document.getElementById("svg-container");
+    let svgOutput = document.getElementById("svg-output");
+    svgCode = await generateSVG(prompt);
+    console.log("svgCode: ", svgCode);
+    svgOutput.textContent = svgCode;
+    svgContainer.innerHTML = svgCode;
+    generateButton.disabled = false;
+  }
+  const generateButton = document.getElementById("generate-button");
+  if (generateButton) {
+    generateButton.addEventListener("click", handleSubmit);
+  }
+</script>
