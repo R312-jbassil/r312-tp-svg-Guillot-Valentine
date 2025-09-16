@@ -23,6 +23,15 @@ import Layout from "../layouts/Layout.astro";
         >Générer</button
       >
     </div>
+    <div class="flex mt-4">
+      <textarea
+        id="svg-name"
+        placeholder="Nom du SVG"
+        class="textarea textarea-bordered"></textarea>
+      <button id="save-button" class="btn btn-outline btn-primary-content">
+        Enregistrer dans ma collection
+      </button>
+    </div>
   </div>
 </Layout>
 
@@ -54,8 +63,34 @@ import Layout from "../layouts/Layout.astro";
     svgContainer.innerHTML = `<span class="loading loading-ring loading-xl"></span>`;
     generateButton.disabled = true;
   }
-  const generateButton = document.getElementById("generate-button");
-  if (generateButton) {
-    generateButton.addEventListener("click", handleSubmit);
+  async function handleSave() {
+    const name = document.getElementById("svg-name").value;
+    const prompt = document.getElementById("user-prompt").value;
+    const svgCode = document.getElementById("svg-output").textContent;
+
+    if (!name || !svgCode) {
+      alert("Veuillez entrer un nom et générer un SVG avant d’enregistrer.");
+      return;
+    }
+
+    // Envoi vers PocketBase
+    const res = await fetch("/api/saveSVG", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name, prompt, svgCode }),
+    });
+
+    if (res.ok) {
+      alert("✅ SVG enregistré avec succès !");
+      document.getElementById("svg-name").value = "";
+    } else {
+      alert("❌ Erreur lors de l’enregistrement");
+    }
   }
+
+  const generateButton = document.getElementById("generate-button");
+  if (generateButton) generateButton.addEventListener("click", handleSubmit);
+
+  const saveButton = document.getElementById("save-button");
+  if (saveButton) saveButton.addEventListener("click", handleSave);
 </script>
