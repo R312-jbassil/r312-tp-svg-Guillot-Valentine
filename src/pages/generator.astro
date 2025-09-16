@@ -1,0 +1,23 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout>
+  <div class="flex flex-col h-full glass bg-primary p-4">
+    <div class="grid grid-cols-2 gap-4 flex-1 mb-4">
+      <div class="w-full flex bg-primary h-full">test</div>
+
+      <div class="w-full pl-2 bg-secondary h-full"></div>
+    </div>
+
+    <div class="flex flex-col">
+      <textarea
+        id="user-prompt"
+        class="textarea textarea-bordered w-full h-32"
+        placeholder="Ex : a red car"></textarea>
+      <button id="generate-button" class="btn btn-outline btn-primary-content"
+        >Générer</button
+      >
+    </div>
+  </div>
+</Layout>
