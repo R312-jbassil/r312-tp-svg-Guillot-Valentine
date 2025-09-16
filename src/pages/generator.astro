@@ -7,7 +7,11 @@ import Layout from "../layouts/Layout.astro";
     <div class="grid grid-cols-2 gap-4 flex-1 mb-4">
       <div id="svg-container" class="w-full flex bg-white h-full"></div>
 
-      <div id="svg-output" class="w-full pl-2 bg-black text-secondary-content h-full"></div>
+      <div
+        id="svg-output"
+        class="w-full pl-2 bg-black text-secondary-content h-full"
+      >
+      </div>
     </div>
 
     <div class="flex flex-col">
@@ -47,8 +51,8 @@ import Layout from "../layouts/Layout.astro";
     svgCode = await generateSVG(prompt);
     console.log("svgCode: ", svgCode);
     svgOutput.textContent = svgCode;
-    svgContainer.innerHTML = svgCode;
-    generateButton.disabled = false;
+    svgContainer.innerHTML = `<span class="loading loading-ring loading-xl"></span>`;
+    generateButton.disabled = true;
   }
   const generateButton = document.getElementById("generate-button");
   if (generateButton) {
